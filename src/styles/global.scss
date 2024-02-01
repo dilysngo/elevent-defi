@@ -1,0 +1,37 @@
+@import './mixins';
+
+// Here you put all global css rules.
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+@media (max-width: 767px) {
+  .hidden-xs {
+    display: none!important;
+  }
+}
+
+
+#bigfoot-link {
+  font-weight: bold;
+  color: #f0b90b;
+  @media (max-width: 959px) {
+    color: unset;
+  }
+}
+
+
+// .pool-section {
+//   padding-left: 16px;
+// }
+
+// @media (min-width: 600px) {
+//   .pool-section {
+//     padding-left: 40px;
+//   }  
+// }
+
+

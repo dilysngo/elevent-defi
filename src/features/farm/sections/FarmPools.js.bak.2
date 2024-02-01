@@ -1,0 +1,306 @@
+import React, {useState, useEffect} from 'react';
+import classNames from "classnames";
+import {useTranslation} from 'react-i18next';
+import {makeStyles} from "@material-ui/core/styles";
+import farmItemStyle from "../jss/sections/farmItemStyle";
+import Grid from '@material-ui/core/Grid';
+// core components
+import Button from "components/CustomButtons/Button.js";
+import {useFetchPoolsInfo} from '../redux/hooks';
+import {Avatar} from "@material-ui/core";
+import { useConnectWallet } from '../../home/redux/hooks';
+import masterchefAbi from "./masterchefabi.json"
+import { erc20ABI, e11Abi, alpacamchef } from "../../configure";
+
+
+const useStyles = makeStyles(farmItemStyle);
+
+
+export default () => {
+  const classes = useStyles();
+  const {t, i18n} = useTranslation();
+  const {pools, poolsInfo, fetchPoolsInfo} = useFetchPoolsInfo();
+  const { web3, address, networkId } = useConnectWallet();
+
+
+function commarize() {
+  // Alter numbers larger than 1k
+  if (this >= 1e3) {
+    var units = ["k", "Million", "Billion", "Trillion", "Quadrillion", "Quintillion", "Sextillion", "Septillion", "Octillion", "Nonillion", "Decillion", "Undecillion"];
+
+    // Divide to get SI Unit engineering style numbers (1e3,1e6,1e9, etc)
+    var unit = 0;
+    if (this>=1e21)
+      unit = Math.floor(Number.parseInt(this.toFixed(0).toString().split("+")[1])/3) * 3
+    else
+      unit = Math.floor(((this).toFixed(0).length - 1) / 3) * 3
+    // Calculate the remainder
+    var num = (this / ('1e'+unit)).toFixed(2)
+    var unitname = units[Math.floor(unit / 3) - 1]
+
+    // output number remainder + unitname
+    return num + " " + unitname
+  }
+
+  // return formatted original number
+  return this.toLocaleString()
+}
+
+
+Number.prototype.commarize = commarize;
+
+
+//  useEffect(() => {
+//    fetchPoolsInfo();
+//  }, [pools, fetchPoolsInfo]);
+
+  useEffect(() => {
+    if (address && web3) {
+      const elelp = "0x1f43e18a2558aef9276a00e041c57ba589813eb2";;
+      const cakelp = "0xa527a61703d82139f8a06bc30097cc9caa2df5a6";
+      const contract = new web3.eth.Contract(masterchefAbi, "0x73feaa1ee314f8c655e354234017be2193c9e24e");
+      const wbnbContract = new web3.eth.Contract(erc20ABI, "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c");
+      const ethContract = new web3.eth.Contract(erc20ABI, "0x2170Ed0880ac9A755fd29B2688956BD959F933F8");
+      const cakeContract = new web3.eth.Contract(erc20ABI, "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82");
+      const elevenPerBnb = 4000;
+      const masterchefAddress = "0x1ac6C0B955B6D7ACb61c9Bdf3EE98E0689e07B8A";
+      const lELEERC20 = new web3.eth.Contract(erc20ABI, elelp);
+      const ELEERC20 = new web3.eth.Contract(erc20ABI, "0xAcD7B3D9c10e97d0efA418903C0c7669E702E4C0");
+      const elevenChef = new web3.eth.Contract(masterchefAbi, masterchefAddress);
+      const aplacaChef = new web3.eth.Contract(alpacamchef, "0xA625AB01B08ce023B2a342Dbb12a16f2C8489A8F");
+      const BMXXERC20 = new web3.eth.Contract(erc20ABI, "0xda88bD84e752960f8fDe52CC2E9e6B19ae0D6e7C");
+      const ASRERC20 = new web3.eth.Contract(erc20ABI, "0x1716D66943b0833f26A938d0A75aEfAc708Bd98B");
+      const JUVERC20 = new web3.eth.Contract(erc20ABI, "0x2f01AC6cDec485d07D4Be8998Bc4c16f540b914C");
+      const PSGERC20 = new web3.eth.Contract(erc20ABI, "0x250b9021018132a52C1bE46d9f1ae53997C3f8A8");
+      const OGERC20 = new web3.eth.Contract(erc20ABI, "0xd2e399e7768fc713c9ecf0c8e8988dd056c8dbd7");
+      const ATMERC20 = new web3.eth.Contract(erc20ABI, "0xd527f4145C84a57E38278485658829040E7e87b7");
+      const E11ERC20 = new web3.eth.Contract(e11Abi, "0x3ed531bfb3fad41111f6dab567b33c4db897f991");
+      const lBMXXERC20 = new web3.eth.Contract(erc20ABI, "0x4D5aA94Ce6BbB1BC4eb73207a5a5d4D052cFcD67");
+      const lASRERC20 = new web3.eth.Contract(erc20ABI, "0xd6b900d5308356317299dafe303e661271aa12f1");
+      const lJUVERC20 = new web3.eth.Contract(erc20ABI, "0x51a2ffa5b7de506f9a22549e48b33f6cf0d9030e");
+      const lPSGERC20 = new web3.eth.Contract(erc20ABI, "0x9c4f6a5050cf863e67a402e8b377973b4e3372c1");
+      const lOGERC20 = new web3.eth.Contract(erc20ABI, "0x64373608f2e93ea97ad4d8ca2cce6b2575db2f55");
+      const lATMERC20 = new web3.eth.Contract(erc20ABI, "0xd5b3ebf1a85d32c73a82b40f75e1cd929caf4029");
+      const lBETHERC20 = new web3.eth.Contract(erc20ABI, "0x99d865ed50d2c32c1493896810fa386c1ce81d91");
+      const ALPACAERC20 = new web3.eth.Contract(erc20ABI, "0x0A33E8e887850Ad53739A0CeF110283b74E02f3e");
+      const lALPACAERC20 = new web3.eth.Contract(erc20ABI, "0xf3ce6aac24980e6b657926dfc79502ae414d3083");
+      const BETHERC20 = new web3.eth.Contract(erc20ABI, "0xc11beE3b3Ff05C59ACC074fa02aEA53a49aa96F1");
+      const alpacatoken = new web3.eth.Contract(erc20ABI, "0x8F0528cE5eF7B51152A59745bEfDD91D97091d2F");
+      getAPYPool(cakeContract, wbnbContract, cakelp, contract, 70, "0x99d865ed50d2c32c1493896810fa386c1ce81d91", "BETH-ETH LP", ethContract, masterchefAddress, ASRERC20, JUVERC20, PSGERC20, OGERC20, ATMERC20, E11ERC20, BETHERC20, elevenChef, lASRERC20, lJUVERC20, lPSGERC20, lOGERC20, lATMERC20, lELEERC20, ELEERC20, lBETHERC20, BMXXERC20, lBMXXERC20, aplacaChef, ALPACAERC20, lALPACAERC20, alpacatoken);
+      getAPYPool(cakeContract, wbnbContract, cakelp, contract, 42, "0x9c4f6a5050cf863e67a402e8b377973b4e3372c1", "PSG-BNB LP", ethContract, masterchefAddress, ASRERC20, JUVERC20, PSGERC20, OGERC20, ATMERC20, E11ERC20, BETHERC20, elevenChef, lASRERC20, lJUVERC20, lPSGERC20, lOGERC20, lATMERC20, lELEERC20, ELEERC20, lBETHERC20, BMXXERC20, lBMXXERC20, aplacaChef, ALPACAERC20, lALPACAERC20, alpacatoken);
+      getAPYPool(cakeContract, wbnbContract, cakelp, contract, 48, "0xd5b3ebf1a85d32c73a82b40f75e1cd929caf4029", "ATM-BNB LP", ethContract, masterchefAddress, ASRERC20, JUVERC20, PSGERC20, OGERC20, ATMERC20, E11ERC20, BETHERC20, elevenChef, lASRERC20, lJUVERC20, lPSGERC20, lOGERC20, lATMERC20, lELEERC20, ELEERC20, lBETHERC20, BMXXERC20, lBMXXERC20, aplacaChef, ALPACAERC20, lALPACAERC20, alpacatoken);
+      getAPYPool(cakeContract, wbnbContract, cakelp, contract, 43, "0x51a2ffa5b7de506f9a22549e48b33f6cf0d9030e", "JUV-BNB LP", ethContract, masterchefAddress, ASRERC20, JUVERC20, PSGERC20, OGERC20, ATMERC20, E11ERC20, BETHERC20, elevenChef, lASRERC20, lJUVERC20, lPSGERC20, lOGERC20, lATMERC20, lELEERC20, ELEERC20, lBETHERC20, BMXXERC20, lBMXXERC20, aplacaChef, ALPACAERC20, lALPACAERC20, alpacatoken);
+      getAPYPool(cakeContract, wbnbContract, cakelp, contract, 46, "0x64373608f2e93ea97ad4d8ca2cce6b2575db2f55", "OG-BNB LP", ethContract, masterchefAddress, ASRERC20, JUVERC20, PSGERC20, OGERC20, ATMERC20, E11ERC20, BETHERC20, elevenChef, lASRERC20, lJUVERC20, lPSGERC20, lOGERC20, lATMERC20, lELEERC20, ELEERC20, lBETHERC20, BMXXERC20, lBMXXERC20, aplacaChef, ALPACAERC20, lALPACAERC20, alpacatoken);
+      getAPYPool(cakeContract, wbnbContract, cakelp, contract, 47, "0xd6b900d5308356317299dafe303e661271aa12f1", "ASR-BNB LP", ethContract, masterchefAddress, ASRERC20, JUVERC20, PSGERC20, OGERC20, ATMERC20, E11ERC20, BETHERC20, elevenChef, lASRERC20, lJUVERC20, lPSGERC20, lOGERC20, lATMERC20, lELEERC20, ELEERC20, lBETHERC20, BMXXERC20, lBMXXERC20, aplacaChef, ALPACAERC20, lALPACAERC20, alpacatoken);
+      getAPYPool(cakeContract, wbnbContract, cakelp, contract, 82, "0x4D5aA94Ce6BbB1BC4eb73207a5a5d4D052cFcD67", "BMXX-BNB LP", ethContract, masterchefAddress, ASRERC20, JUVERC20, PSGERC20, OGERC20, ATMERC20, E11ERC20, BETHERC20, elevenChef, lASRERC20, lJUVERC20, lPSGERC20, lOGERC20, lATMERC20, lELEERC20, ELEERC20, lBETHERC20, BMXXERC20, lBMXXERC20, aplacaChef, ALPACAERC20, lALPACAERC20, alpacatoken);
+      getAPYPool(cakeContract, wbnbContract, cakelp, contract, 999, "0xF3CE6Aac24980E6B657926dfC79502Ae414d3083", "ALPACA-BNB LP", ethContract, masterchefAddress, ASRERC20, JUVERC20, PSGERC20, OGERC20, ATMERC20, E11ERC20, BETHERC20, elevenChef, lASRERC20, lJUVERC20, lPSGERC20, lOGERC20, lATMERC20, lELEERC20, ELEERC20, lBETHERC20, BMXXERC20, lBMXXERC20, aplacaChef, ALPACAERC20, lALPACAERC20, alpacatoken);
+      getAPYPool(cakeContract, wbnbContract, cakelp, contract, 999, "0xd6b900d5308356317299dafe303e661271aa12f1", "ELE", ethContract, masterchefAddress, ASRERC20, JUVERC20, PSGERC20, OGERC20, ATMERC20, E11ERC20, BETHERC20, elevenChef, lASRERC20, lJUVERC20, lPSGERC20, lOGERC20, lATMERC20, lELEERC20, ELEERC20, lBETHERC20, BMXXERC20, lBMXXERC20, aplacaChef, ALPACAERC20, lALPACAERC20, alpacatoken);
+      getAPYPool(cakeContract, wbnbContract, cakelp, contract, 999, "0x1f43e18a2558aef9276a00e041c57ba589813eb2", "ELE-BNB LP", ethContract, masterchefAddress, ASRERC20, JUVERC20, PSGERC20, OGERC20, ATMERC20, E11ERC20, BETHERC20, elevenChef, lASRERC20, lJUVERC20, lPSGERC20, lOGERC20, lATMERC20, lELEERC20, ELEERC20, lBETHERC20, BMXXERC20, lBMXXERC20, aplacaChef, ALPACAERC20, lALPACAERC20, alpacatoken);
+      const id = setInterval(() => {
+      }, 10000);
+      return () => clearInterval(id);
+    }
+  }, [address, web3]);
+
+  const getAPYPool = async (cakeC, wbnbC, cakeL, chefC, pid, lpAddress, elementID, ethC, mchefAddr, asr, juv, psg, og, atm, e11, beth, eChef, lasr, ljuv, lpsg, log, latm, lele, ele, lbeth, bmxx, lbmxx, alpachef, alpaca, lalpaca, alpatoken) => {
+    let apy = 0;
+    const eleInPancake = await ele.methods.balanceOf("0x1f43e18A2558Aef9276A00E041c57ba589813eB2").call();
+    const wbnbInPancakeEle = await wbnbC.methods.balanceOf("0x1f43e18A2558Aef9276A00E041c57ba589813eB2").call();
+    const ePrice = eleInPancake/wbnbInPancakeEle;
+    if(elementID != "ELE" && elementID != "ELE-BNB LP"){
+    const cakeInCakeLp = await cakeC.methods.balanceOf(cakeL).call();
+    const wbnbInCakeLp = await wbnbC.methods.balanceOf(cakeL).call();
+    const yearly = 7500000000000000000000000;
+    const cakeperbnb = cakeInCakeLp/wbnbInCakeLp;
+    const bonusMultiplier = await chefC.methods.BONUS_MULTIPLIER().call();
+    const totalAllocPoints = await chefC.methods.totalAllocPoint().call();
+    const eleTotalAllocPoints = await eChef.methods.totalAllocPoint().call();
+    const cakePerBlock = 4e19;
+    let bnbInPair = 0;
+    //case eth beth
+    if (elementID == "BETH-ETH LP"){
+      const wbnbInEthLP = await wbnbC.methods.balanceOf("0x70D8929d04b60Af4fb9B58713eBcf18765aDE422").call();
+      const ethInEthLP = await ethC.methods.balanceOf("0x70D8929d04b60Af4fb9B58713eBcf18765aDE422").call();
+      const bnbPerEth = wbnbInEthLP/ethInEthLP;
+      const ethInPair = await ethC.methods.balanceOf(lpAddress).call() * 2;
+      bnbInPair = ethInPair * bnbPerEth;
+    }
+    //case bnb pair
+    else{
+      bnbInPair = await wbnbC.methods.balanceOf(lpAddress).call() * 2;
+    }
+    if (elementID == "ALPACA-BNB LP"){
+       const poolNfo = await alpachef.methods.poolInfo(4).call();
+       const bonusAlpa = await alpachef.methods.bonusMultiplier().call();
+       const alpaTotalWeight = await alpachef.methods.totalAllocPoint().call();
+       const alpaPerBlock = await alpachef.methods.alpacaPerBlock().call();
+       const totalAlpaAllocPoints = await alpachef.methods.totalAllocPoint().call();
+       const alpasPerBlockPair = alpaPerBlock * poolNfo["allocPoint"] / totalAlpaAllocPoints * bonusAlpa;
+       const alpasPerBlockPairDay = alpasPerBlockPair * 28800;
+       const alpaInPair = await alpatoken.methods.balanceOf("0xF3CE6Aac24980E6B657926dfC79502Ae414d3083").call();
+       apy = (1+(alpasPerBlockPairDay/alpaInPair/2))**365*100-100;
+    }
+    else {
+      const poolNfo = await chefC.methods.poolInfo(pid).call();
+      const cakesPerBlockPair = cakePerBlock * poolNfo["allocPoint"] / totalAllocPoints * bonusMultiplier;
+      const cakesPerBlockPairDay = cakesPerBlockPair * 28800;
+      const cakeInPair = bnbInPair * cakeperbnb;
+      apy = (1+(cakesPerBlockPairDay/cakeInPair))**365*100-100;}
+    }
+//    apy = 7500000000000000000000000*1/22*100/eleInPair;
+    let eleBalance = 0;
+    if(elementID == "PSG-BNB LP"){
+      //vaultbalance
+      const lpStaked = await psg.methods.balanceOf(mchefAddr).call();
+      const lpSupply = await lpsg.methods.totalSupply().call();
+      const wbnbInPair = await wbnbC.methods.balanceOf(lpAddress).call() * 2;
+      apy += 7500000000000000000000000/45.5*1*100/(wbnbInPair/lpSupply*lpStaked*ePrice);
+    }
+    if(elementID == "ATM-BNB LP"){
+      //vaultbalance
+      const lpStaked = await atm.methods.balanceOf(mchefAddr).call();
+      const lpSupply = await latm.methods.totalSupply().call();
+      const wbnbInPair = await wbnbC.methods.balanceOf(lpAddress).call() * 2;
+      apy += 7500000000000000000000000/45.5*1*100/(wbnbInPair/lpSupply*lpStaked*ePrice);
+    }
+    if(elementID == "ALPA-BNB LP"){
+      //vaultbalance
+      const lpStaked = await alpaca.methods.balanceOf(mchefAddr).call();
+      const lpSupply = await lalpaca.methods.totalSupply().call();
+      const wbnbInPair = await wbnbC.methods.balanceOf(lpAddress).call() * 2;
+      apy += 7500000000000000000000000/45.5*3*100/(wbnbInPair/lpSupply*lpStaked*ePrice);
+    }
+    if(elementID == "JUV-BNB LP"){
+      //vaultbalance
+      const lpStaked = await juv.methods.balanceOf(mchefAddr).call();
+      const lpSupply = await ljuv.methods.totalSupply().call();
+      const wbnbInPair = await wbnbC.methods.balanceOf(lpAddress).call() * 2;
+      apy += 7500000000000000000000000/45.5*1*100/(wbnbInPair/lpSupply*lpStaked*ePrice);
+    }
+    if(elementID == "OG-BNB LP"){
+      //vaultbalance
+      const lpStaked = await og.methods.balanceOf(mchefAddr).call();
+      const lpSupply = await log.methods.totalSupply().call();
+      const wbnbInPair = await wbnbC.methods.balanceOf(lpAddress).call() * 2;
+      apy += 7500000000000000000000000/45.5*1*100/(wbnbInPair/lpSupply*lpStaked*ePrice);
+    }
+    if(elementID == "ASR-BNB LP"){
+      //vaultbalance
+      const lpStaked = await asr.methods.balanceOf(mchefAddr).call();
+      const lpSupply = await lasr.methods.totalSupply().call();
+      const wbnbInPair = await wbnbC.methods.balanceOf(lpAddress).call() * 2;
+      apy += 7500000000000000000000000/45.5*1*100/(wbnbInPair/lpSupply*lpStaked*ePrice);
+    }
+    if(elementID=="BMXX-BNB LP"){
+      const lpStaked = await bmxx.methods.balanceOf(mchefAddr).call();
+      const lpSupply = await lbmxx.methods.totalSupply().call();
+      const wbnbInPair = await wbnbC.methods.balanceOf(lpAddress).call() * 2;
+      apy += 7500000000000000000000000/45.5*0.5*100/(wbnbInPair/lpSupply*lpStaked*ePrice);
+    }
+
+    if(elementID=="ELE-BNB LP"){
+      const lpStaked = await lele.methods.balanceOf(mchefAddr).call();
+      const lpSupply = await lele.methods.totalSupply().call();
+      const eleInPair = await ele.methods.balanceOf(lpAddress).call() * 2;
+      apy += 7500000000000000000000000/45.5*30*100/eleInPair;
+    }
+    if(elementID=="BETH-ETH LP"){
+      const zwbnbInEthLP = await wbnbC.methods.balanceOf("0x70D8929d04b60Af4fb9B58713eBcf18765aDE422").call();
+      const zethInEthLP = await ethC.methods.balanceOf("0x70D8929d04b60Af4fb9B58713eBcf18765aDE422").call();
+      const zbnbPerEth = zwbnbInEthLP/zethInEthLP;
+      const zethInPair = await ethC.methods.balanceOf(lpAddress).call() * 2;
+      const zbnbInPair = zethInPair * zbnbPerEth;
+
+      const lpStaked = await beth.methods.balanceOf(mchefAddr).call();
+      const lpSupply = await lbeth.methods.totalSupply().call();
+      apy += 7500000000000000000000000/45.5*2*100/(zbnbInPair/lpSupply*lpStaked*ePrice);
+    }
+
+    if(elementID=="ELE"){
+      //let sharesPerToken = await e11.methods.sharesPerToken();
+      eleBalance = await e11.methods.balanceOf(mchefAddr).call();
+      apy = apy + 7500000000000000000000000/45.5*5*100/eleBalance;
+    }
+    if (apy>1000000)
+    document.getElementById(elementID).innerHTML = apy.commarize();
+    else
+    document.getElementById(elementID).innerHTML = apy.toFixed(2);
+
+}
+
+
+  const offsetImageStyle = {marginLeft: "-25%", zIndex: 0, background: '#ffffff'}
+  return (
+    <Grid container style={{paddingTop: '4px'}}>
+      <Grid item xs={12}>
+        <div className={classes.mainTitle}>{t('Farm-Main-Title')}</div>
+        <h3 style={{color:'orange'}} className={classes.secondTitle}>{t('Farm-Second-Title')}</h3>
+      </Grid>
+      <Grid container item xs={12} justify={"center"}>
+        {pools.map((pool, index) => {
+          const {token, name, earnedToken, earnedTokenAddress, color, tokenDescription, token1, token2} = pool;
+
+          // 根据名称是否含有LP判断是否是存 LPToken对
+          const isLP = name.toLowerCase().indexOf('lp') > -1;
+
+          const lpTokens = isLP ? token.split('/') : [];
+
+          return (
+            <Grid item sm={6} key={index}>
+              <div style={{background: `rgba(${color},0.5)`}} className={classNames({
+                [classes.flexColumnCenter]: true,
+                [classes.farmItem]: true
+              })} key={index}>
+                {/*Logo处理*/}
+                {isLP && lpTokens.length === 2 ? (
+                  <div className={classes.logo}>
+                    {lpTokens.map((item, index) => {
+                      console.log(`../../../images/${item}-logo.svg`);
+                      return (
+                        <Avatar key={index}
+                                src={require(`../../../images/${item}-logo.svg`)} className={classes.logoImage}
+                                style={index > 0 ? offsetImageStyle : {}}
+                        />
+                      )
+                    })}
+                  </div>
+                ) : <img src={require(`../../../images/${token}-logo.svg`)} className={classes.logoImage}/>}
+                <div className={classes.weightFont} style={{marginTop: 10}}>{token}</div>
+
+                <div style={{fontSize: 13}}>
+                  {t('Farm-Stake')} {tokenDescription}
+                </div>
+                <div style={{fontSize: 13, marginTop: -5}}>{t('Farm-Earn')} {earnedToken}</div>
+
+                <div className={classes.weightFont} style={{margin: 15}}>APY: <span id={ pools[index]["name"] }>loading...</span> %</div>
+
+                {/*操作菜单*/}
+                <div className={classes.menu} style={isLP ? {} : {justifyContent: 'center'}}>
+                  {isLP ? (
+                    <>
+                      <Button className={classes.menuButton}
+                              href={`/#/farm/pool/${index + 1}`}
+                              style={{background: `rgb(${color})`}}>
+                        {t('Farm-Mining')}
+                      </Button>
+                      <Button
+                        className={classes.menuButton}
+                        href={`https://exchange.pancakeswap.finance/#/add/${token1}/${token2}`}
+                        target={"_blank"}
+                        style={{background: `rgb(${color})`}}>
+                        {t('Farm-Get')} LP Token
+                      </Button>
+                    </>
+                  ) : <Button
+                    className={classes.menuButton}
+                    href={`/#/farm/pool/${index + 1}`}
+                    style={{background: `rgb(${color})`}}>{t('Farm-Mining')}</Button>}
+                </div>
+              </div>
+            </Grid>
+          )
+        })}
+      </Grid>
+    </Grid>
+  )
+}

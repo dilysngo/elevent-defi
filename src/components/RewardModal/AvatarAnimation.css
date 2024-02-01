@@ -1,0 +1,33 @@
+.avatarWrapper {
+    display: inline-block;
+    padding: 4px;
+    border-radius: 50%;
+    background-color: #c7971c;
+
+    animation-name: rotation;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-duration: 8s;
+    transform: rotateY(0deg);
+    transform-style: preserve-3d;
+}
+
+@keyframes rotation {
+    0% {
+      transform: rotate3d(0, 1, 0, 0deg);
+      background-color: #c7971c;
+    }
+    25% {
+        transform: rotate3d(0, 1, 0, 60deg);
+    }
+    50% {
+      transform: rotate3d(0, 1, 0, 180deg);
+      background-color: #635AFF;
+    }
+    75% {
+      transform: rotate3d(0, 1, 0, 240deg);
+    }
+    100% {
+      transform: rotate3d(0, 1, 0, 360deg);
+    }
+}
